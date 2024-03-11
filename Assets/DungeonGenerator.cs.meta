@@ -3,7 +3,18 @@ guid: 729bdd1741a32a34a837f0cb6b786ee9
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - dungeonData: {fileID: 4900000, guid: 76a3a9e2ab57a104a9071fb72e0ff96c, type: 3}
+  - roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
+  - emptyRoomPrefab: {instanceID: 0}
+  - roomPrefab: {instanceID: 0}
+  - benchPrefab: {instanceID: 0}
+  - tablePrefab: {instanceID: 0}
+  - collectableItemPrefab: {instanceID: 0}
+  - bookshelfPrefab: {instanceID: 0}
+  - torchPrefab: {instanceID: 0}
+  - doorPrefab: {instanceID: 0}
+  - cratePrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

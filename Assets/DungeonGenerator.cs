@@ -4,17 +4,31 @@ using UnityEngine;
 public class DungeonGenerator : MonoBehaviour
 {
     public TextAsset dungeonData; // Assign your JSON file in the Unity editor
+    public TextAsset roomData; // Assign your JSON room data file in the Unity editor
     public GameObject emptyRoomPrefab; // Prefab for an empty room
     public GameObject roomPrefab; // Prefab for a room
 
+    // Prefabs for room objects
+    public GameObject benchPrefab;
+    public GameObject tablePrefab;
+    public GameObject collectableItemPrefab;
+    public GameObject bookshelfPrefab;
+    public GameObject torchPrefab;
+    public GameObject doorPrefab;
+    public GameObject cratePrefab;
+
     void Start()
     {
-        // Load JSON data
-        string json = dungeonData.text;
-        List<List<int>> dungeonList = DeserializeJson(json);
+        // Load JSON data for the dungeon layout
+        string jsonDungeon = dungeonData.text;
+        List<List<int>> dungeonList = DeserializeJson(jsonDungeon);
+
+        // Load JSON data for the room layout
+        string jsonRoom = roomData.text;
+        List<List<int>> roomList = DeserializeJson(jsonRoom);
 
         // Generate dungeon map based on the data
-        GenerateMap(dungeonList);
+        GenerateMap(dungeonList, roomList);
     }
 
     List<List<int>> DeserializeJson(string json)
@@ -45,14 +59,13 @@ public class DungeonGenerator : MonoBehaviour
         return result;
     }
 
-
-    void GenerateMap(List<List<int>> dungeonList)
+    void GenerateMap(List<List<int>> dungeonList, List<List<int>> roomList)
     {
         // Define tile size and spacing
         float tileSize = 20.0f; // Adjust as needed
         float spacing = 0.1f; // Adjust as needed
 
-        // Instantiate tiles based on dungeon data
+        // Loop through dungeon layout
         for (int y = 0; y < dungeonList.Count; y++)
         {
             for (int x = 0; x < dungeonList[y].Count; x++)
@@ -60,10 +73,109 @@ public class DungeonGenerator : MonoBehaviour
                 // Calculate position based on grid coordinates with spacing
                 Vector3 position = new Vector3(x * (tileSize + spacing), 0, y * (tileSize + spacing));
 
-                GameObject tilePrefab = dungeonList[y][x] == 1 ? roomPrefab : emptyRoomPrefab;
-                Instantiate(tilePrefab, position, Quaternion.identity);
+                // Check if room exists in the dungeon layout
+                if (dungeonList[y][x] == 1)
+                {
+                    // If room exists, generate room based on room layout
+                    GenerateRoom(position, roomList);
+
+                    // Instantiate room prefab at the position
+                    Instantiate(roomPrefab, position, Quaternion.identity); //change this logic later as the room will generate the tiles itself
+                }
+                else
+                {
+                    // Otherwise, generate empty room
+                    Instantiate(emptyRoomPrefab, position, Quaternion.identity);
+                }
             }
         }
     }
 
+    // void GenerateRoom(Vector3 position, List<List<int>> roomList)
+    // {
+    //     // Define tile size and spacing for room
+    //     float tileSize = 1.0f; // Adjust as needed
+    //     float spacing = 0.1f; // Adjust as needed
+        
+
+    //     // Loop through room layout
+    //     for (int y = 0; y < roomList.Count; y++)
+    //     {
+    //         for (int x = 0; x < roomList[y].Count; x++)
+    //         {
+    //             // Calculate position based on grid coordinates with spacing
+    //             Vector3 roomPosition = position + new Vector3(x * (tileSize + spacing), 0, y * (tileSize + spacing));
+
+    //             // Check if room object exists in the room layout
+    //             int roomObjectIndex = roomList[y][x];
+    //             if (roomObjectIndex > 1)
+    //             {
+    //                 // If room object exists, instantiate corresponding prefab
+    //                 GameObject roomObjectPrefab = GetRoomObjectPrefab(roomObjectIndex);
+    //                 if (roomObjectPrefab != null)
+    //                 {
+    //                     Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
+    void GenerateRoom(Vector3 position, List<List<int>> roomList)
+    {
+        // Define tile size and spacing for room
+        float tileSize = 1.0f; // Adjust as needed
+        float spacing = 0.1f; // Adjust as needed
+
+        // Calculate the offset based on the size of the room
+        float offsetX = (roomList[0].Count * (tileSize + spacing)) / 2.0f;
+        float offsetY = (roomList.Count * (tileSize + spacing)) / 2.0f;
+
+        // Loop through room layout
+        for (int y = 0; y < roomList.Count; y++)
+        {
+            for (int x = 0; x < roomList[y].Count; x++)
+            {
+                // Calculate position based on grid coordinates with spacing and apply offset
+                Vector3 roomPosition = position + new Vector3((x * (tileSize + spacing)) - offsetX, 0, (y * (tileSize + spacing)) - offsetY);
+
+                // Check if room object exists in the room layout
+                int roomObjectIndex = roomList[y][x];
+                if (roomObjectIndex > 1)
+                {
+                    // If room object exists, instantiate corresponding prefab
+                    GameObject roomObjectPrefab = GetRoomObjectPrefab(roomObjectIndex);
+                    if (roomObjectPrefab != null)
+                    {
+                        Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
+                    }
+                }
+            }
+        }
+    }
+
+    GameObject GetRoomObjectPrefab(int index)
+    {
+        // Define a mapping between room object index and prefab
+        Dictionary<int, GameObject> prefabMap = new Dictionary<int, GameObject>
+        {
+            { 2, benchPrefab },
+            { 3, tablePrefab },
+            { 4, collectableItemPrefab },
+            { 5, bookshelfPrefab },
+            { 6, torchPrefab },
+            { 7, doorPrefab },
+            { 8, cratePrefab }
+        };
+
+        // Return corresponding prefab for the given index
+        if (prefabMap.ContainsKey(index))
+        {
+            return prefabMap[index];
+        }
+        else
+        {
+            return null; // Return null if no prefab found for the index
+        }
+    }
 }

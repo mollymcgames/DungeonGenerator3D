@@ -153,8 +153,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonData: {fileID: 4900000, guid: 76a3a9e2ab57a104a9071fb72e0ff96c, type: 3}
+  roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
   emptyRoomPrefab: {fileID: 3138392279301285821, guid: e7f058412b354da419b60d2a43a8d870, type: 3}
   roomPrefab: {fileID: 2856054204202187796, guid: 8ccf248566db0d14185969c1373de2f4, type: 3}
+  benchPrefab: {fileID: 5670746333244226910, guid: 18291586e78f6ad45a3b3525b1d33e8c, type: 3}
+  tablePrefab: {fileID: 7452457500809802605, guid: 95760f4d07894b549b4268ba571b61f4, type: 3}
+  collectableItemPrefab: {fileID: 4117355705035204754, guid: 8a133bcb204687a4182409f5991caa19, type: 3}
+  bookshelfPrefab: {fileID: 8393369783053140506, guid: 4704009eca6e5cd47b27e5e382f971c1, type: 3}
+  torchPrefab: {fileID: 882894859604719486, guid: a039d3e9c6f68ea44be41778f58058a7, type: 3}
+  doorPrefab: {fileID: 8208287717734721325, guid: 6736f96f60c020449b0d9712283f478e, type: 3}
+  cratePrefab: {fileID: 1117385026425772992, guid: 154d552c0a0a602418780907fff60484, type: 3}
 --- !u!4 &605290043
 Transform:
   m_ObjectHideFlags: 0
