@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729bdd1741a32a34a837f0cb6b786ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonData: {fileID: 4900000, guid: 76a3a9e2ab57a104a9071fb72e0ff96c, type: 3}
+  dungeonDataUrl: http://127.0.0.1:5000/get_dungeon_data
   roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
   emptyRoomPrefab: {fileID: 3138392279301285821, guid: e7f058412b354da419b60d2a43a8d870, type: 3}
   roomPrefab: {fileID: 2856054204202187796, guid: 8ccf248566db0d14185969c1373de2f4, type: 3}
@@ -173,6 +173,50 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &623816796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 623816798}
+  - component: {fileID: 623816797}
+  m_Layer: 0
+  m_Name: Flask
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &623816797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623816796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1c104092490c2d41b2aa23dba1118d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &623816798
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623816796}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 54.46646, y: 24.930664, z: 80.19625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -371,3 +415,4 @@ SceneRoots:
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 605290043}
+  - {fileID: 623816798}

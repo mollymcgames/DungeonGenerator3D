@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using System.Collections; // Import IEnumerator
 
 public class DungeonGenerator : MonoBehaviour
 {
-    public TextAsset dungeonData; // Assign your JSON file in the Unity editor
-    public TextAsset roomData; // Assign your JSON room data file in the Unity editor
+    // URL for Flask API to fetch dungeon layout data
+    public string dungeonDataUrl;
+
+    public TextAsset roomData; // Assign the JSON room data file in the Unity editor
     public GameObject emptyRoomPrefab; // Prefab for an empty room
     public GameObject roomPrefab; // Prefab for a room
 
@@ -19,16 +23,36 @@ public class DungeonGenerator : MonoBehaviour
 
     void Start()
     {
-        // Load JSON data for the dungeon layout
-        string jsonDungeon = dungeonData.text;
-        List<List<int>> dungeonList = DeserializeJson(jsonDungeon);
+        // Fetch JSON data for the dungeon layout from Flask API
+        StartCoroutine(FetchDungeonData());
+    }
 
-        // Load JSON data for the room layout
-        string jsonRoom = roomData.text;
-        List<List<int>> roomList = DeserializeJson(jsonRoom);
+    IEnumerator FetchDungeonData() // Specify IEnumerator without type argument
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(dungeonDataUrl))
+        {
+            // Send the request and wait for a response
+            yield return webRequest.SendWebRequest();
 
-        // Generate dungeon map based on the data
-        GenerateMap(dungeonList, roomList);
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
+                webRequest.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + webRequest.error);
+            }
+            else
+            {
+                // Parse the JSON data
+                string jsonDungeon = webRequest.downloadHandler.text;
+                List<List<int>> dungeonList = DeserializeJson(jsonDungeon);
+
+                // Load JSON data for the room layout
+                string jsonRoom = roomData.text;
+                List<List<int>> roomList = DeserializeJson(jsonRoom);
+
+                // Generate dungeon map based on the data
+                GenerateMap(dungeonList, roomList);
+            }
+        }
     }
 
     List<List<int>> DeserializeJson(string json)
@@ -90,36 +114,6 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
     }
-
-    // void GenerateRoom(Vector3 position, List<List<int>> roomList)
-    // {
-    //     // Define tile size and spacing for room
-    //     float tileSize = 1.0f; // Adjust as needed
-    //     float spacing = 0.1f; // Adjust as needed
-        
-
-    //     // Loop through room layout
-    //     for (int y = 0; y < roomList.Count; y++)
-    //     {
-    //         for (int x = 0; x < roomList[y].Count; x++)
-    //         {
-    //             // Calculate position based on grid coordinates with spacing
-    //             Vector3 roomPosition = position + new Vector3(x * (tileSize + spacing), 0, y * (tileSize + spacing));
-
-    //             // Check if room object exists in the room layout
-    //             int roomObjectIndex = roomList[y][x];
-    //             if (roomObjectIndex > 1)
-    //             {
-    //                 // If room object exists, instantiate corresponding prefab
-    //                 GameObject roomObjectPrefab = GetRoomObjectPrefab(roomObjectIndex);
-    //                 if (roomObjectPrefab != null)
-    //                 {
-    //                     Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
     void GenerateRoom(Vector3 position, List<List<int>> roomList)
     {
