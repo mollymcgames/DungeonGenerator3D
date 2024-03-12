@@ -4,7 +4,9 @@
 
 Instructions:
 
-Make a Python file called `app.py` in the same folder where `dungeons_dataset.npy` and `rooms_dataset.npy.npy` is.
+1. Run `pip install Flask` where you want to make your Flask app.
+2. Make a Python file called `app.py` in the same folder where `dungeons_dataset.npy` and `rooms_dataset.npy.npy` is.
+
 The contents of `app.py` is:
 
 ```
