@@ -4,14 +4,15 @@ using UnityEngine.Networking;
 
 public class FetchDungeonData : MonoBehaviour
 {
-    void Start()
+    public void GetDungeonData() // Change IEnumerator to public void
     {
-        StartCoroutine(GetDungeonData());
+        Debug.Log("Fetching dungeon data..."); 
+        StartCoroutine(FetchData());
     }
 
-    IEnumerator GetDungeonData()
+    IEnumerator FetchData()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:5000/get_dungeon_data"))
+        using (UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:5000/gan_dungeon"))
         {
             yield return www.SendWebRequest();
 
