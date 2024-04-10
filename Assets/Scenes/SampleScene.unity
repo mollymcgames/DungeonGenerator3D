@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonDataUrl: http://127.0.0.1:8080/gan_dungeon
+  vaeRoomDataUrl: http://127.0.0.1:8080/vae_room
   roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
   emptyRoomPrefab: {fileID: 3138392279301285821, guid: e7f058412b354da419b60d2a43a8d870, type: 3}
   roomPrefab: {fileID: 2856054204202187796, guid: 8ccf248566db0d14185969c1373de2f4, type: 3}
@@ -470,7 +471,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 60, y: 120, z: -20}
+  m_LocalPosition: {x: 120, y: 200, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -8,6 +8,8 @@ public class DungeonGenerator : MonoBehaviour
     // URL for Flask API to fetch dungeon layout data
     public string dungeonDataUrl;
 
+    public string vaeRoomDataUrl; //URL for VAE room data
+
     public TextAsset roomData; // Assign the JSON room data file in the Unity editor
     public GameObject emptyRoomPrefab; // Prefab for an empty room
     public GameObject roomPrefab; // Prefab for a room
@@ -24,7 +26,8 @@ public class DungeonGenerator : MonoBehaviour
     void Start()
     {
         // Fetch JSON data for the dungeon layout from Flask API
-        StartCoroutine(FetchDungeonData());
+        StartCoroutine(FetchDungeonData()); // Start coroutine to fetch dungeon data
+        StartCoroutine(FetchVAERoomData()); // Start coroutine to fetch VAE room data
     }
 
     IEnumerator FetchDungeonData() // Specify IEnumerator without type argument
@@ -47,7 +50,36 @@ public class DungeonGenerator : MonoBehaviour
 
                 // Load JSON data for the room layout
                 string jsonRoom = roomData.text;
+                // string jsonRoom = webRequest.downloadHandler.text;
                 List<List<int>> roomList = DeserializeJson(jsonRoom);
+
+                // Generate dungeon map based on the data
+                GenerateMap(dungeonList, roomList);
+            }
+        }
+    }
+
+    IEnumerator FetchVAERoomData() // Specify IEnumerator without type argument
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(vaeRoomDataUrl))
+        {
+            // Send the request and wait for a response
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
+                webRequest.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + webRequest.error);
+            }
+            else
+            {
+                // Parse the JSON data
+                string jsonRoom = webRequest.downloadHandler.text;
+                List<List<int>> roomList = DeserializeJson(jsonRoom);
+
+                // Load JSON data for the room layout
+                string jsonDungeon = webRequest.downloadHandler.text;
+                List<List<int>> dungeonList = DeserializeJson(jsonDungeon);
 
                 // Generate dungeon map based on the data
                 GenerateMap(dungeonList, roomList);
@@ -82,6 +114,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         return result;
     }
+
 
     void GenerateMap(List<List<int>> dungeonList, List<List<int>> roomList)
     {
