@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections; // Import IEnumerator
+using System.Collections;
+using System; // Import IEnumerator
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -50,6 +51,8 @@ public class DungeonGenerator : MonoBehaviour
 
                 // Load JSON data for the room layout
                 string jsonRoom = roomData.text;
+                Debug.Log("room:");
+                Debug.Log("jsonRoom:");
                 // string jsonRoom = webRequest.downloadHandler.text;
                 List<List<int>> roomList = DeserializeJson(jsonRoom);
 
@@ -76,6 +79,10 @@ public class DungeonGenerator : MonoBehaviour
                 // Parse the JSON data
                 string jsonRoom = webRequest.downloadHandler.text;
                 List<List<int>> roomList = DeserializeJson(jsonRoom);
+
+                Debug.Log("room:");
+                Debug.Log("jsonRoom:");
+
 
                 // Load JSON data for the room layout
                 string jsonDungeon = webRequest.downloadHandler.text;
@@ -174,10 +181,63 @@ public class DungeonGenerator : MonoBehaviour
                     GameObject roomObjectPrefab = GetRoomObjectPrefab(roomObjectIndex);
                     if (roomObjectPrefab != null)
                     {
-                        Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
+                        InstantiateCorrectlyOriented(roomObjectPrefab, x, y, roomList, roomPosition, roomObjectIndex == 7);                        
                     }
                 }
             }
+        }
+    }
+
+    void InstantiateCorrectlyOriented(GameObject roomObjectPrefab, int x, int y, List<List<int>> roomList, Vector3 roomPosition, bool doRotation)
+    {
+        int wallValue = 0;
+
+        if (doRotation) // Check if it's the door prefab (index 7 based on your code)
+        {
+            // Get surrounding tiles information (assuming walls have a specific value in roomList)
+            int leftValue = 0; // Adjust based on your wall value in roomList
+
+            if (x > 0) // Check if there's a tile to the left
+            {
+                leftValue = roomList[y][x - 1];
+            }
+            //Debug.Log("Left value:" + leftValue);
+
+            // Similar checks for right, up, and down (adjust as needed)
+            int rightValue = 0;
+            int upValue = 0;
+            int downValue = 0;
+
+            // Determine rotation based on surrounding walls
+            if (leftValue == wallValue) // Wall to the left, rotate 90 degrees on Y-axis
+            {
+                //Debug.Log("Rotate left");
+                Instantiate(roomObjectPrefab, roomPosition, Quaternion.Euler(0, 90f, 0));
+            }
+            else if (rightValue == wallValue) // Wall to the right, rotate -90 degrees on Y-axis
+            {
+                //Debug.Log("Rotate right");
+                Instantiate(roomObjectPrefab, roomPosition, Quaternion.Euler(0, -90f, 0));
+            }
+            else if (upValue == wallValue) // Wall above, rotate 180 degrees
+            {
+                //Debug.Log("Rotate up");
+                Instantiate(roomObjectPrefab, roomPosition, Quaternion.Euler(0, 180f, 0));
+            }
+            else if (downValue == wallValue) // Wall below, no rotation needed (assuming default)
+            {
+                //Debug.Log("Rotate down");
+                Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
+            }
+            else // No surrounding walls, default rotation
+            {
+                Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
+            }
+        }
+        else
+        {
+            // No rotation needed, just instantiate!
+            Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
         }
     }
 

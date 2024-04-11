@@ -4,10 +4,9 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - dungeonData: {fileID: 4900000, guid: 76a3a9e2ab57a104a9071fb72e0ff96c, type: 3}
   - roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
-  - emptyRoomPrefab: {instanceID: 0}
-  - roomPrefab: {instanceID: 0}
+  - emptyRoomPrefab: {fileID: 3138392279301285821, guid: e7f058412b354da419b60d2a43a8d870, type: 3}
+  - roomPrefab: {fileID: 2856054204202187796, guid: 8ccf248566db0d14185969c1373de2f4, type: 3}
   - benchPrefab: {instanceID: 0}
   - tablePrefab: {instanceID: 0}
   - collectableItemPrefab: {instanceID: 0}
