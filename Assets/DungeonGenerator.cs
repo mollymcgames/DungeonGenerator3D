@@ -24,141 +24,79 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject doorPrefab;
     public GameObject cratePrefab;
 
+    private List<List<int>> roomList = null;
+
     void Start()
     {
         Debug.Log("Building selected dungeon: " + MainManager.Instance.selectedModelDungeon);
         Debug.Log("Building selected room: " + MainManager.Instance.selectedModelRoom);
-        // Fetch JSON data for the dungeon layout from Flask API
-        StartCoroutine(FetchDungeonData()); // Start coroutine to fetch dungeon data
-        StartCoroutine(FetchRoomData()); // Start coroutine to fetch VAE room data
-    }
 
-    public IEnumerator FetchDungeonData() // Specify IEnumerator without type argument
-    {
-        string fullUrl = dungeonDataUrl;
-        Debug.Log("Fetching selected dungeon: " + MainManager.Instance.selectedModelDungeon);
+        string dungeonUrl = dungeonDataUrl;
         switch (MainManager.Instance.selectedModelDungeon)
         {
             case "gandungeon":
-                fullUrl += "/gan_dungeon";
+                dungeonUrl += "/gan_dungeon";
                 break;
             case "pixelcnndungeon":
-                fullUrl += "/dungeon_pixelcnn";
+                dungeonUrl += "/dungeon_pixelcnn";
                 break;
             default:
-                fullUrl += "/gan_dungeon";
+                dungeonUrl += "/gan_dungeon";
                 break;
         }
 
-        Debug.Log("Fetching dungeon data from URL: " + fullUrl); // Add this line to check the URL
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl))
-        {
-            // Send the request and wait for a response
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
-                webRequest.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.LogError("Error: " + webRequest.error);
-            }
-            else
-            {
-                // Parse the JSON data
-                string jsonDungeon = webRequest.downloadHandler.text;
-                List<List<int>> dungeonList = DeserializeJson(jsonDungeon);
-
-                // Load JSON data for the room layout
-                string jsonRoom = roomData.text;
-                Debug.Log("room:");
-                Debug.Log("jsonRoom:");
-                // string jsonRoom = webRequest.downloadHandler.text;
-                List<List<int>> roomList = DeserializeJson(jsonRoom);
-
-                // Generate dungeon map based on the data
-                GenerateMap(dungeonList, roomList);
-            }
-        }
-    }
-
-    IEnumerator FetchRoomData() // Specify IEnumerator without type argument
-    {
-        string fullUrl = roomDataUrl;
-        Debug.Log("Fetching selected room: " + MainManager.Instance.selectedModelRoom);
-       
+        string roomUrl = roomDataUrl;
         switch (MainManager.Instance.selectedModelRoom)
         {
             case "ganroom":
-                fullUrl += "/room_gan";
+                roomUrl += "/room_gan";
                 break;
             case "vaeroom":
-                fullUrl += "/vae_room";
+                roomUrl += "/vae_room";
                 break;
             default:
-                fullUrl += "/vae_room";
+                roomUrl += "/vae_room";
                 break;
         }
 
-        Debug.Log("Fetching room data from URL: " + fullUrl); // Add this line to check the URL
+        // Fetch JSON data for the dungeon layout from Flask API
+        StartCoroutine(FetchDungeonData(dungeonUrl, roomUrl)); 
+    }
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl))
+    public IEnumerator FetchDungeonData(string dungeonUrl, string roomUrl) // Specify IEnumerator without type argument
+    {
+        Debug.Log("Fetching dungeon data from URL: " + dungeonUrl); // Add this line to check the URL
+        Debug.Log("Fetching room data from URL: " + roomUrl); // Add this line to check the URL
+
+        List<List<int>> dungeonList = null;
+
+        using (UnityWebRequest webRequestDungeon = UnityWebRequest.Get(dungeonUrl))
         {
             // Send the request and wait for a response
-            yield return webRequest.SendWebRequest();
+            yield return webRequestDungeon.SendWebRequest();
 
-            if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
-                webRequest.result == UnityWebRequest.Result.ProtocolError)
+            if (webRequestDungeon.result == UnityWebRequest.Result.ConnectionError ||
+                webRequestDungeon.result == UnityWebRequest.Result.ProtocolError)
             {
-                Debug.LogError("Error: " + webRequest.error);
+                Debug.LogError("Error: " + webRequestDungeon.error);
             }
             else
             {
                 // Parse the JSON data
-                string jsonRoom = webRequest.downloadHandler.text;
-                List<List<int>> roomList = DeserializeJson(jsonRoom);
+                string jsonDungeon = webRequestDungeon.downloadHandler.text;
+                Debug.Log("jsonDungeon:");
 
-                Debug.Log("room:");
-                Debug.Log("jsonRoom:");
-                // Load JSON data for the room layout
-                string jsonDungeon = webRequest.downloadHandler.text;
-                List<List<int>> dungeonList = DeserializeJson(jsonDungeon);
-
-                // Generate dungeon map based on the data
-                GenerateMap(dungeonList, roomList);
+                // Load JSON data for the dungeon layout
+                dungeonList = DeserializeJson(jsonDungeon);
             }
+
+            // Generate dungeon map based on the data
+            GenerateMap(dungeonList, roomUrl);
         }
     }
 
-    List<List<int>> DeserializeJson(string json)
-    {
-        List<List<int>> result = new List<List<int>>();
-        json = json.Replace("\n", ""); // Remove newline characters
-        json = json.Replace("\r", ""); // Remove carriage return characters
-        json = json.Trim(); // Remove leading and trailing whitespace
 
-        string[] rows = json.Split('['); // Split JSON by '[' to separate rows
-        foreach (string row in rows)
-        {
-            if (!string.IsNullOrEmpty(row))
-            {
-                List<int> rowData = new List<int>();
-                string[] values = row.Replace("]", "").Split(','); // Split row by ',' to separate values
-                foreach (string value in values)
-                {
-                    int intValue;
-                    if (int.TryParse(value, out intValue))
-                    {
-                        rowData.Add(intValue);
-                    }
-                }
-                result.Add(rowData);
-            }
-        }
-        return result;
-    }
-
-
-    void GenerateMap(List<List<int>> dungeonList, List<List<int>> roomList)
+    void GenerateMap(List<List<int>> dungeonList, string roomUrl)
     {
         // Define tile size and spacing
         float tileSize = 20.0f; // Adjust as needed
@@ -175,11 +113,7 @@ public class DungeonGenerator : MonoBehaviour
                 // Check if room exists in the dungeon layout
                 if (dungeonList[y][x] == 1)
                 {
-                    // If room exists, generate room based on room layout
-                    GenerateRoom(position, roomList);
-
-                    // Instantiate room prefab at the position
-                    Instantiate(roomPrefab, position, Quaternion.identity); //change this logic later as the room will generate the tiles itself
+                    StartCoroutine(FetchAndRenderRoomData(position, roomUrl));
                 }
                 else
                 {
@@ -187,6 +121,38 @@ public class DungeonGenerator : MonoBehaviour
                     Instantiate(emptyRoomPrefab, position, Quaternion.identity);
                 }
             }
+        }
+    }
+
+    IEnumerator FetchAndRenderRoomData(Vector3 position, string roomUrl) // Specify IEnumerator without type argument
+    {
+        Debug.Log("Fetching room data from URL: " + roomUrl); // Add this line to check the URL
+
+        using (UnityWebRequest webRequestRoom = UnityWebRequest.Get(roomUrl))
+        {
+            // Send the request and wait for a response
+            yield return webRequestRoom.SendWebRequest();
+
+            if (webRequestRoom.result == UnityWebRequest.Result.ConnectionError ||
+                webRequestRoom.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + webRequestRoom.error);
+            }
+            else
+            {
+                // Parse the JSON data
+                string jsonRoom = webRequestRoom.downloadHandler.text;
+                Debug.Log("jsonRoom:" + jsonRoom);
+
+                // Load JSON data for the room layout
+                roomList = DeserializeJson(jsonRoom);
+            }
+
+            // If room exists, generate room based on room layout
+            GenerateRoom(position, roomList);
+
+            // Instantiate room prefab at the position
+            Instantiate(roomPrefab, position, Quaternion.identity); //change this logic later as the room will generate the tiles itself
         }
     }
 
@@ -300,4 +266,33 @@ public class DungeonGenerator : MonoBehaviour
             return null; // Return null if no prefab found for the index
         }
     }
+
+    List<List<int>> DeserializeJson(string json)
+    {
+        List<List<int>> result = new List<List<int>>();
+        json = json.Replace("\n", ""); // Remove newline characters
+        json = json.Replace("\r", ""); // Remove carriage return characters
+        json = json.Trim(); // Remove leading and trailing whitespace
+
+        string[] rows = json.Split('['); // Split JSON by '[' to separate rows
+        foreach (string row in rows)
+        {
+            if (!string.IsNullOrEmpty(row))
+            {
+                List<int> rowData = new List<int>();
+                string[] values = row.Replace("]", "").Split(','); // Split row by ',' to separate values
+                foreach (string value in values)
+                {
+                    int intValue;
+                    if (int.TryParse(value, out intValue))
+                    {
+                        rowData.Add(intValue);
+                    }
+                }
+                result.Add(rowData);
+            }
+        }
+        return result;
+    }
+
 }
