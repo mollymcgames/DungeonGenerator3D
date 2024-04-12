@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 605290043}
-  - component: {fileID: 605290042}
+  - component: {fileID: 605290044}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -140,30 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &605290042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605290041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 729bdd1741a32a34a837f0cb6b786ee9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dungeonDataUrl: http://127.0.0.1:8080/dungeon_pixelcnn
-  vaeRoomDataUrl: http://127.0.0.1:8080/vae_room
-  roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
-  emptyRoomPrefab: {fileID: 3138392279301285821, guid: e7f058412b354da419b60d2a43a8d870, type: 3}
-  roomPrefab: {fileID: 2856054204202187796, guid: 8ccf248566db0d14185969c1373de2f4, type: 3}
-  benchPrefab: {fileID: 5670746333244226910, guid: 18291586e78f6ad45a3b3525b1d33e8c, type: 3}
-  tablePrefab: {fileID: 7452457500809802605, guid: 95760f4d07894b549b4268ba571b61f4, type: 3}
-  collectableItemPrefab: {fileID: 4117355705035204754, guid: 8a133bcb204687a4182409f5991caa19, type: 3}
-  bookshelfPrefab: {fileID: 8393369783053140506, guid: 4704009eca6e5cd47b27e5e382f971c1, type: 3}
-  torchPrefab: {fileID: 882894859604719486, guid: a039d3e9c6f68ea44be41778f58058a7, type: 3}
-  doorPrefab: {fileID: 8208287717734721325, guid: 6736f96f60c020449b0d9712283f478e, type: 3}
-  cratePrefab: {fileID: 1117385026425772992, guid: 154d552c0a0a602418780907fff60484, type: 3}
 --- !u!4 &605290043
 Transform:
   m_ObjectHideFlags: 0
@@ -179,6 +155,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &605290044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 605290041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f612a01e3c3cb41b56df06e3993c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonDataUrl: http://localhost:8080
+  roomDataUrl: http://localhost:8080
+  roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
+  emptyRoomPrefab: {fileID: 3138392279301285821, guid: e7f058412b354da419b60d2a43a8d870, type: 3}
+  roomPrefab: {fileID: 2856054204202187796, guid: 8ccf248566db0d14185969c1373de2f4, type: 3}
+  benchPrefab: {fileID: 5670746333244226910, guid: 18291586e78f6ad45a3b3525b1d33e8c, type: 3}
+  tablePrefab: {fileID: 7452457500809802605, guid: 95760f4d07894b549b4268ba571b61f4, type: 3}
+  collectableItemPrefab: {fileID: 4117355705035204754, guid: 8a133bcb204687a4182409f5991caa19, type: 3}
+  bookshelfPrefab: {fileID: 8393369783053140506, guid: 4704009eca6e5cd47b27e5e382f971c1, type: 3}
+  torchPrefab: {fileID: 882894859604719486, guid: a039d3e9c6f68ea44be41778f58058a7, type: 3}
+  doorPrefab: {fileID: 8208287717734721325, guid: 6736f96f60c020449b0d9712283f478e, type: 3}
+  cratePrefab: {fileID: 1117385026425772992, guid: 154d552c0a0a602418780907fff60484, type: 3}
 --- !u!1 &623816796
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +188,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 623816798}
-  - component: {fileID: 623816797}
   m_Layer: 0
   m_Name: Flask
   m_TagString: Untagged
@@ -196,18 +195,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &623816797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623816796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1c104092490c2d41b2aa23dba1118d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &623816798
 Transform:
   m_ObjectHideFlags: 0

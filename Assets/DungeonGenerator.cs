@@ -9,7 +9,7 @@ public class DungeonGenerator : MonoBehaviour
     // URL for Flask API to fetch dungeon layout data
     public string dungeonDataUrl;
 
-    public string vaeRoomDataUrl; //URL for VAE room data
+    public string roomDataUrl; //URL for VAE room data
 
     public TextAsset roomData; // Assign the JSON room data file in the Unity editor
     public GameObject emptyRoomPrefab; // Prefab for an empty room
@@ -26,17 +26,33 @@ public class DungeonGenerator : MonoBehaviour
 
     void Start()
     {
-        // // Fetch JSON data for the dungeon layout from Flask API
+        Debug.Log("Building selected dungeon: " + MainManager.Instance.selectedModelDungeon);
+        Debug.Log("Building selected room: " + MainManager.Instance.selectedModelRoom);
+        // Fetch JSON data for the dungeon layout from Flask API
         StartCoroutine(FetchDungeonData()); // Start coroutine to fetch dungeon data
-        StartCoroutine(FetchVAERoomData()); // Start coroutine to fetch VAE room data
+        StartCoroutine(FetchRoomData()); // Start coroutine to fetch VAE room data
     }
 
     public IEnumerator FetchDungeonData() // Specify IEnumerator without type argument
     {
+        string fullUrl = dungeonDataUrl;
+        Debug.Log("Fetching selected dungeon: " + MainManager.Instance.selectedModelDungeon);
+        switch (MainManager.Instance.selectedModelDungeon)
+        {
+            case "gandungeon":
+                fullUrl += "/gan_dungeon";
+                break;
+            case "pixelcnndungeon":
+                fullUrl += "/dungeon_pixelcnn";
+                break;
+            default:
+                fullUrl += "/gan_dungeon";
+                break;
+        }
 
-        Debug.Log("Fetching dungeon data from URL: " + dungeonDataUrl); // Add this line to check the URL
+        Debug.Log("Fetching dungeon data from URL: " + fullUrl); // Add this line to check the URL
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(dungeonDataUrl))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl))
         {
             // Send the request and wait for a response
             yield return webRequest.SendWebRequest();
@@ -65,9 +81,27 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    IEnumerator FetchVAERoomData() // Specify IEnumerator without type argument
+    IEnumerator FetchRoomData() // Specify IEnumerator without type argument
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(vaeRoomDataUrl))
+        string fullUrl = roomDataUrl;
+        Debug.Log("Fetching selected room: " + MainManager.Instance.selectedModelRoom);
+       
+        switch (MainManager.Instance.selectedModelRoom)
+        {
+            case "ganroom":
+                fullUrl += "/room_gan";
+                break;
+            case "vaeroom":
+                fullUrl += "/vae_room";
+                break;
+            default:
+                fullUrl += "/vae_room";
+                break;
+        }
+
+        Debug.Log("Fetching room data from URL: " + fullUrl); // Add this line to check the URL
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(fullUrl))
         {
             // Send the request and wait for a response
             yield return webRequest.SendWebRequest();

@@ -29,4 +29,19 @@ public class MainMenu : MonoBehaviour
         Debug.Log("BackToMainMenu() called");
         SceneManager.LoadScene("MainMenuStart");
     }
+
+    public void SelectDungeon(string dungeonType)
+    {
+        // add code here to handle when a color is selected
+        MainManager.Instance.selectedModelDungeon = dungeonType;
+        Debug.Log("Selected dungeon: " + MainManager.Instance.selectedModelDungeon);
+    }
+
+    public void SelectRoom(string roomType)
+    {
+        // add code here to handle when a color is selected
+        MainManager.Instance.selectedModelRoom = roomType;
+        Debug.Log("Selected room: " + MainManager.Instance.selectedModelRoom);
+    }
+
 }
