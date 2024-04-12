@@ -355,7 +355,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 258605223}
         m_TargetAssemblyTypeName: FetchDungeonData, Assembly-CSharp
-        m_MethodName: GetDungeonData
+        m_MethodName: GetPixelCNNDungeonData
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

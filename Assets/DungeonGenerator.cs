@@ -26,13 +26,16 @@ public class DungeonGenerator : MonoBehaviour
 
     void Start()
     {
-        // Fetch JSON data for the dungeon layout from Flask API
+        // // Fetch JSON data for the dungeon layout from Flask API
         StartCoroutine(FetchDungeonData()); // Start coroutine to fetch dungeon data
         StartCoroutine(FetchVAERoomData()); // Start coroutine to fetch VAE room data
     }
 
-    IEnumerator FetchDungeonData() // Specify IEnumerator without type argument
+    public IEnumerator FetchDungeonData() // Specify IEnumerator without type argument
     {
+
+        Debug.Log("Fetching dungeon data from URL: " + dungeonDataUrl); // Add this line to check the URL
+
         using (UnityWebRequest webRequest = UnityWebRequest.Get(dungeonDataUrl))
         {
             // Send the request and wait for a response
@@ -82,8 +85,6 @@ public class DungeonGenerator : MonoBehaviour
 
                 Debug.Log("room:");
                 Debug.Log("jsonRoom:");
-
-
                 // Load JSON data for the room layout
                 string jsonDungeon = webRequest.downloadHandler.text;
                 List<List<int>> dungeonList = DeserializeJson(jsonDungeon);

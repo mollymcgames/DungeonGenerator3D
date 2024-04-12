@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729bdd1741a32a34a837f0cb6b786ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonDataUrl: http://127.0.0.1:8080/gan_dungeon
+  dungeonDataUrl: http://127.0.0.1:8080/dungeon_pixelcnn
   vaeRoomDataUrl: http://127.0.0.1:8080/vae_room
   roomData: {fileID: 4900000, guid: 7d652e6dc166c3f47af769791295ad2a, type: 3}
   emptyRoomPrefab: {fileID: 3138392279301285821, guid: e7f058412b354da419b60d2a43a8d870, type: 3}

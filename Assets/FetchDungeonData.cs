@@ -4,15 +4,22 @@ using UnityEngine.Networking;
 
 public class FetchDungeonData : MonoBehaviour
 {
-    public void GetDungeonData() // Change IEnumerator to public void
+
+    public void GetDungeonData()
     {
-        Debug.Log("Fetching dungeon data..."); 
-        StartCoroutine(FetchData());
+        Debug.Log("Fetching GAN dungeon data..."); 
+        StartCoroutine(FetchData("http://127.0.0.1:8080/gan_dungeon"));
     }
 
-    IEnumerator FetchData()
+    public void GetPixelCNNDungeonData()
     {
-        using (UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:5000/gan_dungeon"))
+        Debug.Log("Fetching pixelcnn dungeon data..."); 
+        StartCoroutine(FetchData("http://127.0.0.1:8080/dungeon_pixelcnn"));
+    }
+
+    IEnumerator FetchData(string url)
+    {
+        using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             yield return www.SendWebRequest();
 
@@ -20,6 +27,16 @@ public class FetchDungeonData : MonoBehaviour
             {
                 string json = www.downloadHandler.text;
                 Debug.Log(json); // Print the received JSON data
+                DungeonGenerator dungeonGenerator = FindObjectOfType<DungeonGenerator>();
+                if (dungeonGenerator != null)
+                {
+                    dungeonGenerator.dungeonDataUrl = url; // Pass the URL to the DungeonGenerator
+                    StartCoroutine(dungeonGenerator.FetchDungeonData()); // Start fetching dungeon data
+                }
+                else
+                {
+                    Debug.LogError("DungeonGenerator not found in the scene.");
+                }
             }
             else
             {
