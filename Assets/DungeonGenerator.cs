@@ -30,21 +30,21 @@ public class DungeonGenerator : MonoBehaviour
     {
         Debug.Log("Building selected dungeon: " + MainManager.Instance.selectedModelDungeon);
         Debug.Log("Building selected room: " + MainManager.Instance.selectedModelRoom);
-
+ 
         string dungeonUrl = dungeonDataUrl;
         switch (MainManager.Instance.selectedModelDungeon)
         {
             case "gandungeon":
-                dungeonUrl += "/gan_dungeon";
+                dungeonUrl += "/dungeon_gan";
                 break;
             case "pixelcnndungeon":
                 dungeonUrl += "/dungeon_pixelcnn";
                 break;
             default:
-                dungeonUrl += "/gan_dungeon";
+                dungeonUrl += "/dungeon_gan";
                 break;
         }
-
+ 
         string roomUrl = roomDataUrl;
         switch (MainManager.Instance.selectedModelRoom)
         {
@@ -52,13 +52,13 @@ public class DungeonGenerator : MonoBehaviour
                 roomUrl += "/room_gan";
                 break;
             case "vaeroom":
-                roomUrl += "/vae_room";
+                roomUrl += "/room_vae";
                 break;
             default:
-                roomUrl += "/vae_room";
+                roomUrl += "/room_vae";
                 break;
         }
-
+ 
         // Fetch JSON data for the dungeon layout from Flask API
         StartCoroutine(FetchDungeonData(dungeonUrl, roomUrl)); 
     }
