@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 public class FetchRoomData : MonoBehaviour
 {
-    public void GetRoomData() // Change IEnumerator to public void
+    public void GetRoomData()
     {
         Debug.Log("Fetching room data..."); 
         StartCoroutine(FetchData());
@@ -19,7 +19,6 @@ public class FetchRoomData : MonoBehaviour
             if (www.result == UnityWebRequest.Result.Success)
             {
                 string json = www.downloadHandler.text;
-                // Debug.Log(json); // Print the received JSON data
             }
             else
             {

@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-
-        void Start()
+    void Start()
     {
         Debug.Log("MainMenu script started!");
     }
@@ -23,7 +22,6 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    //Go back to main menu
     public void BackToMainMenu()
     {
         Debug.Log("BackToMainMenu() called");
@@ -32,14 +30,12 @@ public class MainMenu : MonoBehaviour
 
     public void SelectDungeon(string dungeonType)
     {
-        // add code here to handle when a color is selected
         MainManager.Instance.selectedModelDungeon = dungeonType;
         Debug.Log("Selected dungeon: " + MainManager.Instance.selectedModelDungeon);
     }
 
     public void SelectRoom(string roomType)
     {
-        // add code here to handle when a color is selected
         MainManager.Instance.selectedModelRoom = roomType;
         Debug.Log("Selected room: " + MainManager.Instance.selectedModelRoom);
     }

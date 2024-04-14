@@ -63,10 +63,10 @@ public class DungeonGenerator : MonoBehaviour
         StartCoroutine(FetchDungeonData(dungeonUrl, roomUrl)); 
     }
 
-    public IEnumerator FetchDungeonData(string dungeonUrl, string roomUrl) // Specify IEnumerator without type argument
+    public IEnumerator FetchDungeonData(string dungeonUrl, string roomUrl)
     {
-        Debug.Log("Fetching dungeon data from URL: " + dungeonUrl); // Add this line to check the URL
-        Debug.Log("Fetching room data from URL: " + roomUrl); // Add this line to check the URL
+        Debug.Log("Fetching dungeon data from URL: " + dungeonUrl); 
+        Debug.Log("Fetching room data from URL: " + roomUrl);
 
         List<List<int>> dungeonList = null;
 
@@ -152,7 +152,7 @@ public class DungeonGenerator : MonoBehaviour
             GenerateRoom(position, roomList);
 
             // Instantiate room prefab at the position
-            Instantiate(roomPrefab, position, Quaternion.identity); //change this logic later as the room will generate the tiles itself
+            Instantiate(roomPrefab, position, Quaternion.identity);
         }
     }
 
@@ -202,7 +202,6 @@ public class DungeonGenerator : MonoBehaviour
             {
                 leftValue = roomList[y][x - 1];
             }
-            //Debug.Log("Left value:" + leftValue);
 
             // Similar checks for right, up, and down (adjust as needed)
             int rightValue = 0;
@@ -212,22 +211,18 @@ public class DungeonGenerator : MonoBehaviour
             // Determine rotation based on surrounding walls
             if (leftValue == wallValue) // Wall to the left, rotate 90 degrees on Y-axis
             {
-                //Debug.Log("Rotate left");
                 Instantiate(roomObjectPrefab, roomPosition, Quaternion.Euler(0, 90f, 0));
             }
             else if (rightValue == wallValue) // Wall to the right, rotate -90 degrees on Y-axis
             {
-                //Debug.Log("Rotate right");
                 Instantiate(roomObjectPrefab, roomPosition, Quaternion.Euler(0, -90f, 0));
             }
             else if (upValue == wallValue) // Wall above, rotate 180 degrees
             {
-                //Debug.Log("Rotate up");
                 Instantiate(roomObjectPrefab, roomPosition, Quaternion.Euler(0, 180f, 0));
             }
             else if (downValue == wallValue) // Wall below, no rotation needed (assuming default)
             {
-                //Debug.Log("Rotate down");
                 Instantiate(roomObjectPrefab, roomPosition, Quaternion.identity);
             }
             else // No surrounding walls, default rotation

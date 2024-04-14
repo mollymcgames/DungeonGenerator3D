@@ -31,7 +31,6 @@ public class FetchDungeonData : MonoBehaviour
                 if (dungeonGenerator != null)
                 {
                     dungeonGenerator.dungeonDataUrl = url; // Pass the URL to the DungeonGenerator
-                    //StartCoroutine(dungeonGenerator.FetchDungeonData()); // Start fetching dungeon data
                 }
                 else
                 {
